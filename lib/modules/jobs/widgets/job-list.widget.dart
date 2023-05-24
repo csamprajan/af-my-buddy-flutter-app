@@ -2,20 +2,20 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:chopper/chopper.dart';
-import 'package:dsep_reference_flutter/animations/slide-bottom.animation.dart';
-import 'package:dsep_reference_flutter/animations/slide-right.animation.dart';
-import 'package:dsep_reference_flutter/common/widgets/decorated-text.widget.dart';
-import 'package:dsep_reference_flutter/common/widgets/job-list-tem.widget.dart';
-import 'package:dsep_reference_flutter/common/widgets/loading-animation.widget.dart';
+import 'package:my_buddy/animations/slide-bottom.animation.dart';
+import 'package:my_buddy/animations/slide-right.animation.dart';
+import 'package:my_buddy/common/widgets/decorated-text.widget.dart';
+import 'package:my_buddy/common/widgets/job-list-tem.widget.dart';
+import 'package:my_buddy/common/widgets/loading-animation.widget.dart';
 
-import 'package:dsep_reference_flutter/global_constants.dart';
-import 'package:dsep_reference_flutter/local_models/serializable-models/serialized-job.dart';
-import 'package:dsep_reference_flutter/modules/jobs/pages/view-job.page.dart';
-import 'package:dsep_reference_flutter/modules/jobs/widgets/job-filters.widget.dart';
-import 'package:dsep_reference_flutter/swagger_models_apis/job_seeker_api.swagger.dart';
+import 'package:my_buddy/global_constants.dart';
+import 'package:my_buddy/local_models/serializable-models/serialized-job.dart';
+import 'package:my_buddy/modules/jobs/pages/view-job.page.dart';
+import 'package:my_buddy/modules/jobs/widgets/job-filters.widget.dart';
+import 'package:my_buddy/swagger_models_apis/job_seeker_api.swagger.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:dsep_reference_flutter/swagger_models_apis/job_seeker_api.models.swagger.dart'
+import 'package:my_buddy/swagger_models_apis/job_seeker_api.models.swagger.dart'
     as jobseekermodels;
 import 'package:flutter_svg/svg.dart';
 
@@ -46,7 +46,7 @@ class _JobListWidgetState extends State<JobListWidget> {
       _loadingJobsInProgressFlag = true;
     });
     SearchJob? _searchJobBody = SearchJob(
-      title: SearchJob$Title(key: "DevOps"),
+      title: SearchJob$Title(key: "Manager"),
     );
 
     // SearchJob? _searchJobBody = SearchJob.fromJson({});
@@ -57,50 +57,55 @@ class _JobListWidgetState extends State<JobListWidget> {
         .jobSearchPost(body: _searchJobBody)
         .then((Response<SearchJobsResponse> response) {
       if (response.isSuccessful) {
-        Map<String, dynamic> searchJobResponseMap =
-            jsonDecode(response.bodyString);
         setState(() {
           _jobs = [];
-          List<Map<String, dynamic>> jobResults = [];
+          debugPrint("response.bodyString: " + response.bodyString);
+          if (response.bodyString.isNotEmpty) {
+            Map<String, dynamic> searchJobResponseMap =
+                jsonDecode(response.bodyString);
+            if (searchJobResponseMap.isNotEmpty) {
+              List<Map<String, dynamic>> jobResults = [];
 
-          searchJobResponseMap["jobResults"].forEach((dynamic jobResult) {
-            jobResults.add(jobResult as Map<String, dynamic>);
-          });
-          jobResults.forEach((jobResultMap) {
-            Map<String, dynamic> companyMap =
-                jobResultMap["company"] as Map<String, dynamic>;
-            Company company = Company.fromJson(companyMap);
-            String? logoUrl;
-            if (companyMap["imageLink"] != null) {
-              companyMap["imageLink"].forEach((dynamic imageLinkDynamic) {
-                jobseekermodels.Image image =
-                    jobseekermodels.Image.fromJson(imageLinkDynamic);
-                logoUrl = image.url;
+              searchJobResponseMap["jobResults"].forEach((dynamic jobResult) {
+                jobResults.add(jobResult as Map<String, dynamic>);
+              });
+              jobResults.forEach((jobResultMap) {
+                Map<String, dynamic> companyMap =
+                    jobResultMap["company"] as Map<String, dynamic>;
+                Company company = Company.fromJson(companyMap);
+                String? logoUrl;
+                if (companyMap["imageLink"] != null) {
+                  companyMap["imageLink"].forEach((dynamic imageLinkDynamic) {
+                    jobseekermodels.Image image =
+                        jobseekermodels.Image.fromJson(imageLinkDynamic);
+                    logoUrl = image.url;
+                  });
+                }
+                jobResultMap["jobs"].forEach((dynamic jobSummaryDynamic) {
+                  Map<String, dynamic> jobSummaryMap =
+                      jobSummaryDynamic as Map<String, dynamic>;
+                  List<Location> locations = [];
+                  jobSummaryMap["locations"].forEach((locationDynamic) {
+                    locations.add(Location.fromJson(
+                        locationDynamic as Map<String, dynamic>));
+                  });
+                  JobSummary jobsummary = JobSummary.fromJson(jobSummaryMap);
+                  SerializedJob newJob = SerializedJob(
+                    jobId: jobsummary.jobId,
+                    role: jobsummary.role,
+                    company: company.name ?? "",
+                    bppId: response.body!.context.bppId,
+                    bppUri: response.body!.context.bppUri,
+                    description: jobsummary.description,
+                    city: (locations.length > 0) ? locations[0].city : null,
+                    state: (locations.length > 0) ? locations[0].state : null,
+                    companyLogo: logoUrl,
+                  );
+                  _jobs!.add(newJob);
+                });
               });
             }
-            jobResultMap["jobs"].forEach((dynamic jobSummaryDynamic) {
-              Map<String, dynamic> jobSummaryMap =
-                  jobSummaryDynamic as Map<String, dynamic>;
-              List<Location> locations = [];
-              jobSummaryMap["locations"].forEach((locationDynamic) {
-                locations.add(
-                    Location.fromJson(locationDynamic as Map<String, dynamic>));
-              });
-              JobSummary jobsummary = JobSummary.fromJson(jobSummaryMap);
-              SerializedJob newJob = SerializedJob(
-                jobId: jobsummary.jobId,
-                role: jobsummary.role,
-                company: company.name ?? "",
-                bppId: response.body!.context.bppId,
-                bppUri: response.body!.context.bppUri,
-                description: jobsummary.description,
-                city: (locations.length > 0) ? locations[0].city : null,
-                state: (locations.length > 0) ? locations[0].state : null,
-                companyLogo: logoUrl,
-              );
-              _jobs!.add(newJob);
-            });
-          });
+          }
           _loadingJobsInProgressFlag = false;
         });
       }

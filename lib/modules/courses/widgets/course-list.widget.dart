@@ -1,19 +1,19 @@
 import 'dart:convert';
 
 import 'package:chopper/chopper.dart';
-import 'package:dsep_reference_flutter/animations/slide-bottom.animation.dart';
-import 'package:dsep_reference_flutter/animations/slide-right.animation.dart';
-import 'package:dsep_reference_flutter/common/widgets/decorated-text.widget.dart';
-import 'package:dsep_reference_flutter/common/widgets/course-list-item.widget.dart';
-import 'package:dsep_reference_flutter/common/widgets/loading-animation.widget.dart';
+import 'package:my_buddy/animations/slide-bottom.animation.dart';
+import 'package:my_buddy/animations/slide-right.animation.dart';
+import 'package:my_buddy/common/widgets/decorated-text.widget.dart';
+import 'package:my_buddy/common/widgets/course-list-item.widget.dart';
+import 'package:my_buddy/common/widgets/loading-animation.widget.dart';
 
-import 'package:dsep_reference_flutter/global_constants.dart';
-import 'package:dsep_reference_flutter/local_models/serializable-models/serialized-course.dart';
-import 'package:dsep_reference_flutter/modules/courses/pages/search-courses.page.dart';
-import 'package:dsep_reference_flutter/modules/courses/pages/view-course.page.dart';
-import 'package:dsep_reference_flutter/swagger_models_apis/job_seeker_api.swagger.dart'
+import 'package:my_buddy/global_constants.dart';
+import 'package:my_buddy/local_models/serializable-models/serialized-course.dart';
+import 'package:my_buddy/modules/courses/pages/search-courses.page.dart';
+import 'package:my_buddy/modules/courses/pages/view-course.page.dart';
+import 'package:my_buddy/swagger_models_apis/job_seeker_api.swagger.dart'
     as jobseekerapi;
-import 'package:dsep_reference_flutter/swagger_models_apis/user_management_api.swagger.dart'
+import 'package:my_buddy/swagger_models_apis/user_management_api.swagger.dart'
     as usermanagementapi;
 import './courses-filter.widget.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +48,7 @@ class _CourseListWidgetState extends State<CourseListWidget> {
     });
     jobseekerapi.SearchCourseRequest _searchCourseBody =
         jobseekerapi.SearchCourseRequest(
-      searchTitle: 'Problem solving Aspects and Python Programming',
+      searchTitle: 'Python',
     );
     // SearchCourse? _searchCourseBody = SearchCourse.fromJson({});
     Provider.of<jobseekerapi.JobSeekerApi>(

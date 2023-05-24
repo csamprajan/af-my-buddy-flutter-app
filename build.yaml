@@ -18,9 +18,9 @@ targets:
       # swagger_dart_code_generator:
       #   options:
       #     # custom configuration options!
-      #     input_urls:
-      #       # `${process.env.CLOUD_WALLET_URL}/api/swagger`,
-      #       - "https://cloud-wallet-api.prod.affinity-project.org/api/swagger"
+          # input_urls:
+          #   # `${process.env.CLOUD_WALLET_URL}/api/swagger`,
+          #   - "https://cloud-wallet-api.prod.affinity-project.org/api/swagger"
       #       # - "https://raw.githubusercontent.com/epam-cross-platform-lab/swagger-dart-code-generator/master/example/input_folder/pet_service_yaml.yaml"
       #     input_folder: 'lib/swagger_json/cloud-wallet-api/'
       #     output_folder: "lib/swagger_models_apis/cloud-wallet/"

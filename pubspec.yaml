@@ -1,4 +1,4 @@
-name: dsep_reference_flutter
+name: my_buddy
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -31,7 +31,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   chopper: ^6.0.0
   flutter_dotenv: ^5.0.2
   cupertino_icons: ^1.0.2
@@ -43,10 +42,11 @@ dependencies:
   shared_preferences: ^2.0.15
   intl: ^0.18.0
   email_validator: ^2.1.17
-  flutter_datetime_picker: ^1.5.1
+  flutter_datetime_picker: ^1.5.1 
   flutter_spinkit: ^5.0.0
   uuid: ^3.0.7
   lottie: ^2.2.0
+  flutter_launcher_icons: ^0.13.1
   # openapi_generator: ^4.0.0
   
 dev_dependencies:
@@ -67,6 +67,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -112,6 +113,7 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
+
   assets:
     - .env
     - assets/google_logo.svg
@@ -122,4 +124,27 @@ flutter:
     - assets/animations/ok.json
     - assets/sunbird-stamp.png
     - assets/sunbird-logo.svg
+    - assets/android_icon.png
+    - assets/ios_icon.png
 
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  remove_alpha_ios: true
+  image_path_android: "assets/android_icon.png"
+  image_path_ios: "assets/ios_icon.png"
+  adaptive_icon_foreground: "assets/android_icon.png"
+  adaptive_icon_background: "#ffffff"  
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  # web:
+  #   generate: true
+  #   image_path: "path/to/image.png"
+  #   background_color: "#hexcode"
+  #   theme_color: "#hexcode"
+  # windows:
+  #   generate: true
+  #   image_path: "path/to/image.png"
+  #   icon_size: 48 # min:48, max:256, default: 48
+  # macos:
+  #   generate: true
+  #   image_path: "path/to/image.png"

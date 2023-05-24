@@ -17,3 +17,7 @@ Build tasks are available in build.yaml then run the following command
 flutter pub run build_runner build --delete-conflicting-outputs
 
 
+
+Generate Icon:
+
+flutter pub run flutter_launcher_icons:main
